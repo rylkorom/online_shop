@@ -1,0 +1,77 @@
+{% extends "shop/layout.html" %}
+{% load static %}
+{% block title %}Your shopping cart{% endblock %}
+{% block content %}
+{% if cart|length %}
+<h1 align="center">Your shopping cart</h1>
+<table class="cart" align="center">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for item in cart %}
+        {% with product=item.product %}
+            <tr>
+                <td>
+                    <h5><a href="{{ product.get_absolute_url }}" class="">
+                    {{ product.name }}
+                    </a>
+                    </h5>
+                </td>
+                <td>
+                    <form action="{% url 'cart_add' product.id %}" method="post" style="margin-top: 25px; margin-left: 5px;">
+                    {{ item.update_quantity_form.quantity }}
+                    {{ item.update_quantity_form.update }}
+                    <a href="{% url 'index' %}"><button class="btn btn-outline-dark flex-shrink-0" type="submit" style="margin-left: 70px; margin-top: -65px;">
+                        Update
+                    </button></a>
+                    {% csrf_token %}
+                    </form>
+                </td>
+                <td><p style="margin-top: 20px;" align="center">${{ item.price }}</p></td>
+                <td><p style="margin-top: 20px;" align="center">${{ item.total_price }}</p></td>
+                <td>
+                    <a href="{% url 'cart_remove' product.id %}"><button class="btn btn-outline-dark flex-shrink-0" type="submit" style="margin-left: 20px;">
+                        Remove
+                    </button></a>
+                </td>
+            </tr>
+        {% endwith %}
+    {% endfor %}
+    <tr>
+        <td><h4>Total: </h4></td>
+    <td colspan="3"></td>
+        <td class="num"><h4>${{ cart.get_total_price }}</h4></td>
+    </tr>
+    </tbody>
+</table>
+<p class="text-right" align="center">
+    <a href="{% url 'index' %}"><button class="btn btn-outline-dark flex-shrink-0" type="button">
+        Homepage
+    </button></a>
+    <a href="{% url 'cart_clear' %}"><button class="btn btn-outline-dark flex-shrink-0" type="button">
+        Clear Cart
+    </button></a>
+    {% if cart|length %}
+        <a href="{% url 'order_create' %}"><button class="btn btn-outline-dark flex-shrink-0" type="button">
+            Checkout
+        </button></a>
+    {% else %}
+        <a href="#"><button class="btn btn-outline-dark flex-shrink-0" type="button">
+            Checkout
+        </button></a>
+    {% endif %}
+</p>
+{% else %}
+   <h1 align="center">Your shopping cart is empty</h1>
+{% endif %}
+<!--{% for item in cart %}-->
+<!--<p>{{ item }}</p>-->
+<!--{%endfor%}-->
+<!--<p>{{cart|length}}</p>-->
+{% endblock %}

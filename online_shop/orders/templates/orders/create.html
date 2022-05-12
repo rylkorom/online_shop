@@ -1,0 +1,40 @@
+{% extends "shop/layout.html" %}
+{% block title %}
+Checkout
+{% endblock %}
+{% block content %}
+<div style="margin-left: 20px;">
+<h1>Checkout</h1>
+<div class="order-info">
+    <h3>Your Order:</h3>
+    {% for item in cart %}
+    <h5>{{ item.quantity }} x {{ item.product.name }}
+        ${{ item.total_price }}</h5>
+    <br>
+    {% endfor %}
+    <h5>Total: ${{ cart.get_total_price }}</h5>
+    <br>
+</div>
+<form action="." method="post" class="order-form">
+
+    <h5>First Name: </h5>
+    {{ form.first_name }}
+    <h5>Last Name: </h5>
+    {{ form.last_name }}
+    <h5>Email: </h5>
+    {{ form.email }}
+    <h5>Street, house, aprt: </h5>
+    {{ form.address }}
+    <h5>Postal code:</h5>
+    {{ form.postal_code }}
+    <h5>City:</h5>
+    {{ form.city }}
+    <br>
+    <br>
+<button class="btn btn-outline-dark flex-shrink-0" type="submit" style="margin-left: 50px; margin-bottom: 15px;">
+    Subbmit
+</button>
+{% csrf_token %}
+</form>
+</div>
+{% endblock %}
